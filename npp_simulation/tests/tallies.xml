@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<tallies>
+  <mesh id="1">
+    <dimension>20 20 20</dimension>
+    <lower_left>-49.9 -49.9 -49.9</lower_left>
+    <upper_right>49.9 49.9 49.9</upper_right>
+  </mesh>
+  <filter id="1" type="cell">
+    <bins>1</bins>
+  </filter>
+  <filter id="2" type="mesh">
+    <bins>1</bins>
+  </filter>
+  <filter id="3" type="surface">
+    <bins>2</bins>
+  </filter>
+  <filter id="4" type="energy">
+    <bins>0.0 1e-05 0.5 20.0</bins>
+  </filter>
+  <tally id="1" name="nuclide_rates">
+    <filters>1</filters>
+    <nuclides>U235 U238</nuclides>
+    <scores>fission nu-fission absorption</scores>
+  </tally>
+  <tally id="2" name="heating">
+    <filters>1</filters>
+    <scores>heating</scores>
+  </tally>
+  <tally id="3" name="mesh_flux">
+    <filters>2</filters>
+    <scores>flux</scores>
+  </tally>
+  <tally id="4" name="mesh_heating">
+    <filters>2</filters>
+    <scores>heating</scores>
+  </tally>
+  <tally id="5" name="surface_current">
+    <filters>3</filters>
+    <scores>current</scores>
+  </tally>
+  <tally id="6" name="spectrum">
+    <filters>1 4</filters>
+    <scores>flux</scores>
+  </tally>
+</tallies>

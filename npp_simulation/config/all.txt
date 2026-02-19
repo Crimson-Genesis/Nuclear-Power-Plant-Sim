@@ -1,0 +1,1011 @@
+./steam_generator.yaml:# Standard Log Levels (Python logging)
+./steam_generator.yaml:#
+./steam_generator.yaml:# 1. DEBUG (10)
+./steam_generator.yaml:#   > Detailed diagnostic information.
+./steam_generator.yaml:#   > Used when developing or troubleshooting.
+./steam_generator.yaml:#   > Example: variable values, internal state updates.
+./steam_generator.yaml:#
+./steam_generator.yaml:# 2. INFO (20)
+./steam_generator.yaml:#   > General runtime events to confirm things are working as expected.
+./steam_generator.yaml:#   > Example: “Component X started successfully.”
+./steam_generator.yaml:#
+./steam_generator.yaml:# 3. WARNING (30)
+./steam_generator.yaml:#   > Indicates something unexpected happened, but the program can still continue.
+./steam_generator.yaml:#   > Example: “Heartbeat delayed — possible performance issue.”
+./steam_generator.yaml:#
+./steam_generator.yaml:# 4. ERROR (40)
+./steam_generator.yaml:#   > A serious problem occurred; a specific operation failed.
+./steam_generator.yaml:#   > Example: “Failed to connect to turbine controller.”
+./steam_generator.yaml:#
+./steam_generator.yaml:# 5. CRITICAL (50)
+./steam_generator.yaml:#   > The program itself may not be able to continue.
+./steam_generator.yaml:#   > Example: “Control system unresponsive — shutting down."
+./steam_generator.yaml:
+./steam_generator.yaml:role: "The main steam generator which (unpressurised water heater)."
+./steam_generator.yaml:log_level: "INFO"
+./steam_generator.yaml:connections:
+./steam_generator.yaml:  ctrl:
+./steam_generator.yaml:    endpoint: "ipc:///tmp/main.ctrl"
+./steam_generator.yaml:    type: "DEALER"
+./steam_generator.yaml:  tick: 
+./steam_generator.yaml:    endpoint: "ipc:///tmp/clock.tick"
+./steam_generator.yaml:    type: "SUB"
+./steam_generator.yaml:  heartbeat:
+./steam_generator.yaml:    endpoint: "ipc:///tmp/main.heartbeat"
+./steam_generator.yaml:    type: "PUB"
+./steam_generator.yaml:  telemetry:
+./steam_generator.yaml:    endpoint: "ipc:///tmp/main.telemetry"
+./steam_generator.yaml:    type: "PUB"
+./steam_generator.yaml:  in: 
+./steam_generator.yaml:    -
+./steam_generator.yaml:      name: "steam_generator"
+./steam_generator.yaml:      endpoint: "ipc:///tmp/steam_generator.connection"
+./steam_generator.yaml:      type: "PULL"
+./steam_generator.yaml:  out:
+./steam_generator.yaml:    -
+./steam_generator.yaml:      name: "primary_coolant"
+./steam_generator.yaml:      endpoint: "ipc:///tmp/primary_coolant.connection"
+./steam_generator.yaml:      type: "PUSH"
+./steam_generator.yaml:    -
+./steam_generator.yaml:      name: "turbine_generator"
+./steam_generator.yaml:      endpoint: "ipc:///tmp/turbine_generator.connection"
+./steam_generator.yaml:      type: "PUSH"
+./steam_generator.yaml:  other:
+./steam_generator.yaml:    -
+./steam_generator.yaml:parameters:
+./steam_generator.yaml:    
+./condenser.yaml:# Standard Log Levels (Python logging)
+./condenser.yaml:#
+./condenser.yaml:# 1. DEBUG (10)
+./condenser.yaml:#   > Detailed diagnostic information.
+./condenser.yaml:#   > Used when developing or troubleshooting.
+./condenser.yaml:#   > Example: variable values, internal state updates.
+./condenser.yaml:#
+./condenser.yaml:# 2. INFO (20)
+./condenser.yaml:#   > General runtime events to confirm things are working as expected.
+./condenser.yaml:#   > Example: “Component X started successfully.”
+./condenser.yaml:#
+./condenser.yaml:# 3. WARNING (30)
+./condenser.yaml:#   > Indicates something unexpected happened, but the program can still continue.
+./condenser.yaml:#   > Example: “Heartbeat delayed — possible performance issue.”
+./condenser.yaml:#
+./condenser.yaml:# 4. ERROR (40)
+./condenser.yaml:#   > A serious problem occurred; a specific operation failed.
+./condenser.yaml:#   > Example: “Failed to connect to turbine controller.”
+./condenser.yaml:#
+./condenser.yaml:# 5. CRITICAL (50)
+./condenser.yaml:#   > The program itself may not be able to continue.
+./condenser.yaml:#   > Example: “Control system unresponsive — shutting down."
+./condenser.yaml:
+./condenser.yaml:role: "The main condenser cooling system (used for cooling the steam from the turbine and convert it back to water in lower temp)."
+./condenser.yaml:log_level: "INFO"
+./condenser.yaml:connections:
+./condenser.yaml:  ctrl:
+./condenser.yaml:    endpoint: "ipc:///tmp/main.ctrl"
+./condenser.yaml:    type: "DEALER"
+./condenser.yaml:  tick: 
+./condenser.yaml:    endpoint: "ipc:///tmp/clock.tick"
+./condenser.yaml:    type: "SUB"
+./condenser.yaml:  heartbeat:
+./condenser.yaml:    endpoint: "ipc:///tmp/main.heartbeat"
+./condenser.yaml:    type: "PUB"
+./condenser.yaml:  telemetry:
+./condenser.yaml:    endpoint: "ipc:///tmp/main.telemetry"
+./condenser.yaml:    type: "PUB"
+./condenser.yaml:  in: 
+./condenser.yaml:    -
+./condenser.yaml:      name: "condenser_cooling"
+./condenser.yaml:      endpoint: "ipc:///tmp/condenser_cooling.connection"
+./condenser.yaml:      type: "PULL"
+./condenser.yaml:  out:
+./condenser.yaml:    -
+./condenser.yaml:      name: "turbine_generator"
+./condenser.yaml:      endpoint: "ipc:///tmp/turbine_generator.connection"
+./condenser.yaml:      type: "PUSH"
+./condenser.yaml:    -
+./condenser.yaml:      name: "condenser_cooling_water_source"
+./condenser.yaml:      endpoint: "ipc:///tmp/condenser_cooling_water_source.connection"
+./condenser.yaml:      type: "PUSH"
+./condenser.yaml:  other:
+./condenser.yaml:    -
+./condenser.yaml:parameters:
+./condenser.yaml:    
+./telemetry.yaml:# Standard Log Levels (Python logging)
+./telemetry.yaml:#
+./telemetry.yaml:# 1. DEBUG (10)
+./telemetry.yaml:#   > Detailed diagnostic information.
+./telemetry.yaml:#   > Used when developing or troubleshooting.
+./telemetry.yaml:#   > Example: variable values, internal state updates.
+./telemetry.yaml:#
+./telemetry.yaml:# 2. INFO (20)
+./telemetry.yaml:#   > General runtime events to confirm things are working as expected.
+./telemetry.yaml:#   > Example: “Component X started successfully.”
+./telemetry.yaml:#
+./telemetry.yaml:# 3. WARNING (30)
+./telemetry.yaml:#   > Indicates something unexpected happened, but the program can still continue.
+./telemetry.yaml:#   > Example: “Heartbeat delayed — possible performance issue.”
+./telemetry.yaml:#
+./telemetry.yaml:# 4. ERROR (40)
+./telemetry.yaml:#   > A serious problem occurred; a specific operation failed.
+./telemetry.yaml:#   > Example: “Failed to connect to turbine controller.”
+./telemetry.yaml:#
+./telemetry.yaml:# 5. CRITICAL (50)
+./telemetry.yaml:#   > The program itself may not be able to continue.
+./telemetry.yaml:#   > Example: “Control system unresponsive — shutting down."
+./telemetry.yaml:
+./telemetry.yaml:role: "The main telemetry loogging system which logs all the data."
+./telemetry.yaml:log_level: "INFO"
+./telemetry.yaml:connections:
+./telemetry.yaml:  ctrl:
+./telemetry.yaml:    endpoint: "ipc:///tmp/main.ctrl"
+./telemetry.yaml:    type: "DEALER"
+./telemetry.yaml:  tick: 
+./telemetry.yaml:    endpoint: "ipc:///tmp/clock.tick"
+./telemetry.yaml:    type: "SUB"
+./telemetry.yaml:  heartbeat:
+./telemetry.yaml:    endpoint: "ipc:///tmp/main.heartbeat"
+./telemetry.yaml:    type: "PUB"
+./telemetry.yaml:  telemetry:
+./telemetry.yaml:    endpoint: "ipc:///tmp/main.telemetry"
+./telemetry.yaml:    type: "SUB"
+./telemetry.yaml:  in: 
+./telemetry.yaml:    -
+./telemetry.yaml:  out:
+./telemetry.yaml:    -
+./telemetry.yaml:  other:
+./telemetry.yaml:    -
+./telemetry.yaml:parameters:
+./telemetry.yaml:    
+./control_system.yaml:# Standard Log Levels (Python logging)
+./control_system.yaml:#
+./control_system.yaml:# 1. DEBUG (10)
+./control_system.yaml:#   > Detailed diagnostic information.
+./control_system.yaml:#   > Used when developing or troubleshooting.
+./control_system.yaml:#   > Example: variable values, internal state updates.
+./control_system.yaml:#
+./control_system.yaml:# 2. INFO (20)
+./control_system.yaml:#   > General runtime events to confirm things are working as expected.
+./control_system.yaml:#   > Example: “Component X started successfully.”
+./control_system.yaml:#
+./control_system.yaml:# 3. WARNING (30)
+./control_system.yaml:#   > Indicates something unexpected happened, but the program can still continue.
+./control_system.yaml:#   > Example: “Heartbeat delayed — possible performance issue.”
+./control_system.yaml:#
+./control_system.yaml:# 4. ERROR (40)
+./control_system.yaml:#   > A serious problem occurred; a specific operation failed.
+./control_system.yaml:#   > Example: “Failed to connect to turbine controller.”
+./control_system.yaml:#
+./control_system.yaml:# 5. CRITICAL (50)
+./control_system.yaml:#   > The program itself may not be able to continue.
+./control_system.yaml:#   > Example: “Control system unresponsive — shutting down."
+./control_system.yaml:
+./control_system.yaml:role: "cli & user interaction (this helps in the organiging of the Entire system and lets the user control using cli like interface)."
+./control_system.yaml:log_level: "INFO"
+./control_system.yaml:connections:
+./control_system.yaml:  ctrl:
+./control_system.yaml:    endpoint: "ipc:///tmp/main.ctrl"
+./control_system.yaml:    type: "ROUTER"
+./control_system.yaml:  tick: 
+./control_system.yaml:    endpoint: "ipc:///tmp/clock.tick"
+./control_system.yaml:    type: "SUB"
+./control_system.yaml:  heartbeat:
+./control_system.yaml:    endpoint: "ipc:///tmp/main.heartbeat"
+./control_system.yaml:    type: "SUB"
+./control_system.yaml:  telemetry:
+./control_system.yaml:    endpoint: "ipc:///tmp/main.telemetry"
+./control_system.yaml:    type: "PUB"
+./control_system.yaml:  in:
+./control_system.yaml:    -
+./control_system.yaml:      name: "runner"
+./control_system.yaml:      endpoint: "ipc:///tmp/runner.connection"
+./control_system.yaml:      type: "PULL"
+./control_system.yaml:  out:
+./control_system.yaml:    -
+./control_system.yaml:  other:
+./control_system.yaml:    -
+./control_system.yaml:parameters:
+./control_system.yaml:  
+./condenser_cooling_water_source.yaml:# Standard Log Levels (Python logging)
+./condenser_cooling_water_source.yaml:#
+./condenser_cooling_water_source.yaml:# 1. DEBUG (10)
+./condenser_cooling_water_source.yaml:#   > Detailed diagnostic information.
+./condenser_cooling_water_source.yaml:#   > Used when developing or troubleshooting.
+./condenser_cooling_water_source.yaml:#   > Example: variable values, internal state updates.
+./condenser_cooling_water_source.yaml:#
+./condenser_cooling_water_source.yaml:# 2. INFO (20)
+./condenser_cooling_water_source.yaml:#   > General runtime events to confirm things are working as expected.
+./condenser_cooling_water_source.yaml:#   > Example: “Component X started successfully.”
+./condenser_cooling_water_source.yaml:#
+./condenser_cooling_water_source.yaml:# 3. WARNING (30)
+./condenser_cooling_water_source.yaml:#   > Indicates something unexpected happened, but the program can still continue.
+./condenser_cooling_water_source.yaml:#   > Example: “Heartbeat delayed — possible performance issue.”
+./condenser_cooling_water_source.yaml:#
+./condenser_cooling_water_source.yaml:# 4. ERROR (40)
+./condenser_cooling_water_source.yaml:#   > A serious problem occurred; a specific operation failed.
+./condenser_cooling_water_source.yaml:#   > Example: “Failed to connect to turbine controller.”
+./condenser_cooling_water_source.yaml:#
+./condenser_cooling_water_source.yaml:# 5. CRITICAL (50)
+./condenser_cooling_water_source.yaml:#   > The program itself may not be able to continue.
+./condenser_cooling_water_source.yaml:#   > Example: “Control system unresponsive — shutting down."
+./condenser_cooling_water_source.yaml:
+./condenser_cooling_water_source.yaml:role: "The main river like water(coolent) source, from which condenser takes the water."
+./condenser_cooling_water_source.yaml:log_level: "INFO"
+./condenser_cooling_water_source.yaml:connections:
+./condenser_cooling_water_source.yaml:  ctrl:
+./condenser_cooling_water_source.yaml:    endpoint: "ipc:///tmp/main.ctrl"
+./condenser_cooling_water_source.yaml:    type: "DEALER"
+./condenser_cooling_water_source.yaml:  tick: 
+./condenser_cooling_water_source.yaml:    endpoint: "ipc:///tmp/clock.tick"
+./condenser_cooling_water_source.yaml:    type: "SUB"
+./condenser_cooling_water_source.yaml:  heartbeat:
+./condenser_cooling_water_source.yaml:    endpoint: "ipc:///tmp/main.heartbeat"
+./condenser_cooling_water_source.yaml:    type: "PUB"
+./condenser_cooling_water_source.yaml:  telemetry:
+./condenser_cooling_water_source.yaml:    endpoint: "ipc:///tmp/main.telemetry"
+./condenser_cooling_water_source.yaml:    type: "PUB"
+./condenser_cooling_water_source.yaml:  in: 
+./condenser_cooling_water_source.yaml:    -
+./condenser_cooling_water_source.yaml:      name: "condenser_cooling_water_source"
+./condenser_cooling_water_source.yaml:      endpoint: "ipc:///tmp/condenser_cooling_water_source.connection"
+./condenser_cooling_water_source.yaml:      type: "PULL"
+./condenser_cooling_water_source.yaml:  out:
+./condenser_cooling_water_source.yaml:    -
+./condenser_cooling_water_source.yaml:      name: "condenser_cooling"
+./condenser_cooling_water_source.yaml:      endpoint: "ipc:///tmp/condenser_cooling.connection"
+./condenser_cooling_water_source.yaml:      type: "PUSH"
+./condenser_cooling_water_source.yaml:  other:
+./condenser_cooling_water_source.yaml:    -
+./condenser_cooling_water_source.yaml:parameters:
+./condenser_cooling_water_source.yaml:    
+./grid.yaml:# Standard Log Levels (Python logging)
+./grid.yaml:#
+./grid.yaml:# 1. DEBUG (10)
+./grid.yaml:#   > Detailed diagnostic information.
+./grid.yaml:#   > Used when developing or troubleshooting.
+./grid.yaml:#   > Example: variable values, internal state updates.
+./grid.yaml:#
+./grid.yaml:# 2. INFO (20)
+./grid.yaml:#   > General runtime events to confirm things are working as expected.
+./grid.yaml:#   > Example: “Component X started successfully.”
+./grid.yaml:#
+./grid.yaml:# 3. WARNING (30)
+./grid.yaml:#   > Indicates something unexpected happened, but the program can still continue.
+./grid.yaml:#   > Example: “Heartbeat delayed — possible performance issue.”
+./grid.yaml:#
+./grid.yaml:# 4. ERROR (40)
+./grid.yaml:#   > A serious problem occurred; a specific operation failed.
+./grid.yaml:#   > Example: “Failed to connect to turbine controller.”
+./grid.yaml:#
+./grid.yaml:# 5. CRITICAL (50)
+./grid.yaml:#   > The program itself may not be able to continue.
+./grid.yaml:#   > Example: “Control system unresponsive — shutting down."
+./grid.yaml:
+./grid.yaml:role: "The main Electrical Grid interface which is connected to the outside for Electrical conversion."
+./grid.yaml:log_level: "INFO"
+./grid.yaml:connections:
+./grid.yaml:  ctrl:
+./grid.yaml:    endpoint: "ipc:///tmp/main.ctrl"
+./grid.yaml:    type: "DEALER"
+./grid.yaml:  tick: 
+./grid.yaml:    endpoint: "ipc:///tmp/clock.tick"
+./grid.yaml:    type: "SUB"
+./grid.yaml:  heartbeat:
+./grid.yaml:    endpoint: "ipc:///tmp/main.heartbeat"
+./grid.yaml:    type: "PUB"
+./grid.yaml:  telemetry:
+./grid.yaml:    endpoint: "ipc:///tmp/main.telemetry"
+./grid.yaml:    type: "PUB"
+./grid.yaml:  in: 
+./grid.yaml:    -
+./grid.yaml:      name: "grid_interface"
+./grid.yaml:      endpoint: "ipc:///tmp/grid_interface.connection"
+./grid.yaml:      type: "PULL"
+./grid.yaml:  out:
+./grid.yaml:    -
+./grid.yaml:      name: "turbine_generator"
+./grid.yaml:      endpoint: "ipc:///tmp/turbine_generator.connection"
+./grid.yaml:      type: "PUSH"
+./grid.yaml:  other:
+./grid.yaml:    -
+./grid.yaml:parameters:
+./grid.yaml:    
+./coolant.yaml:# Standard Log Levels (Python logging)
+./coolant.yaml:#
+./coolant.yaml:# 1. DEBUG (10)
+./coolant.yaml:#   > Detailed diagnostic information.
+./coolant.yaml:#   > Used when developing or troubleshooting.
+./coolant.yaml:#   > Example: variable values, internal state updates.
+./coolant.yaml:#
+./coolant.yaml:# 2. INFO (20)
+./coolant.yaml:#   > General runtime events to confirm things are working as expected.
+./coolant.yaml:#   > Example: “Component X started successfully.”
+./coolant.yaml:#
+./coolant.yaml:# 3. WARNING (30)
+./coolant.yaml:#   > Indicates something unexpected happened, but the program can still continue.
+./coolant.yaml:#   > Example: “Heartbeat delayed — possible performance issue.”
+./coolant.yaml:#
+./coolant.yaml:# 4. ERROR (40)
+./coolant.yaml:#   > A serious problem occurred; a specific operation failed.
+./coolant.yaml:#   > Example: “Failed to connect to turbine controller.”
+./coolant.yaml:#
+./coolant.yaml:# 5. CRITICAL (50)
+./coolant.yaml:#   > The program itself may not be able to continue.
+./coolant.yaml:#   > Example: “Control system unresponsive — shutting down."
+./coolant.yaml:
+./coolant.yaml:role: "The main primary coolant loop system (PWR main coolant loop)."
+./coolant.yaml:log_level: "INFO"
+./coolant.yaml:connections:
+./coolant.yaml:  ctrl:
+./coolant.yaml:    endpoint: "ipc:///tmp/main.ctrl"
+./coolant.yaml:    type: "DEALER"
+./coolant.yaml:  tick: 
+./coolant.yaml:    endpoint: "ipc:///tmp/clock.tick"
+./coolant.yaml:    type: "SUB"
+./coolant.yaml:  heartbeat:
+./coolant.yaml:    endpoint: "ipc:///tmp/main.heartbeat"
+./coolant.yaml:    type: "PUB"
+./coolant.yaml:  telemetry:
+./coolant.yaml:    endpoint: "ipc:///tmp/main.telemetry"
+./coolant.yaml:    type: "PUB"
+./coolant.yaml:  in: 
+./coolant.yaml:    -
+./coolant.yaml:      name: "primary_coolant"
+./coolant.yaml:      endpoint: "ipc:///tmp/primary_coolant.connection"
+./coolant.yaml:      type: "PULL"
+./coolant.yaml:  out:
+./coolant.yaml:    -
+./coolant.yaml:      name: "reactor_core"
+./coolant.yaml:      endpoint: "ipc:///tmp/reactor_core.connection"
+./coolant.yaml:      type: "PUSH"
+./coolant.yaml:    -
+./coolant.yaml:      name: "steam_generator"
+./coolant.yaml:      endpoint: "ipc:///tmp/steam_generator.connection"
+./coolant.yaml:      type: "PUSH"
+./coolant.yaml:  other:
+./coolant.yaml:    -
+./coolant.yaml:parameters:
+./coolant.yaml:    
+./turbine.yaml:# Standard Log Levels (Python logging)
+./turbine.yaml:#
+./turbine.yaml:# 1. DEBUG (10)
+./turbine.yaml:#   > Detailed diagnostic information.
+./turbine.yaml:#   > Used when developing or troubleshooting.
+./turbine.yaml:#   > Example: variable values, internal state updates.
+./turbine.yaml:#
+./turbine.yaml:# 2. INFO (20)
+./turbine.yaml:#   > General runtime events to confirm things are working as expected.
+./turbine.yaml:#   > Example: “Component X started successfully.”
+./turbine.yaml:#
+./turbine.yaml:# 3. WARNING (30)
+./turbine.yaml:#   > Indicates something unexpected happened, but the program can still continue.
+./turbine.yaml:#   > Example: “Heartbeat delayed — possible performance issue.”
+./turbine.yaml:#
+./turbine.yaml:# 4. ERROR (40)
+./turbine.yaml:#   > A serious problem occurred; a specific operation failed.
+./turbine.yaml:#   > Example: “Failed to connect to turbine controller.”
+./turbine.yaml:#
+./turbine.yaml:# 5. CRITICAL (50)
+./turbine.yaml:#   > The program itself may not be able to continue.
+./turbine.yaml:#   > Example: “Control system unresponsive — shutting down."
+./turbine.yaml:
+./turbine.yaml:role: "The main steam turbine generator (which uses the steam form the steam_generator)."
+./turbine.yaml:log_level: "INFO"
+./turbine.yaml:connections:
+./turbine.yaml:  ctrl:
+./turbine.yaml:    endpoint: "ipc:///tmp/main.ctrl"
+./turbine.yaml:    type: "DEALER"
+./turbine.yaml:  tick: 
+./turbine.yaml:    endpoint: "ipc:///tmp/clock.tick"
+./turbine.yaml:    type: "SUB"
+./turbine.yaml:  heartbeat:
+./turbine.yaml:    endpoint: "ipc:///tmp/main.heartbeat"
+./turbine.yaml:    type: "PUB"
+./turbine.yaml:  telemetry:
+./turbine.yaml:    endpoint: "ipc:///tmp/main.telemetry"
+./turbine.yaml:    type: "PUB"
+./turbine.yaml:  in: 
+./turbine.yaml:    -
+./turbine.yaml:      name: "turbine_generator"
+./turbine.yaml:      endpoint: "ipc:///tmp/turbine_generator.connection"
+./turbine.yaml:      type: "PULL"
+./turbine.yaml:  out:
+./turbine.yaml:    -
+./turbine.yaml:      name: "steam_generator"
+./turbine.yaml:      endpoint: "ipc:///tmp/steam_generator.connection"
+./turbine.yaml:      type: "PUSH"
+./turbine.yaml:    -
+./turbine.yaml:      name: "condenser_cooling"
+./turbine.yaml:      endpoint: "ipc:///tmp/condenser_cooling.connection"
+./turbine.yaml:      type: "PUSH"
+./turbine.yaml:    -
+./turbine.yaml:      name: "grid_interface"
+./turbine.yaml:      endpoint: "ipc:///tmp/grid_interface.connection"
+./turbine.yaml:      type: "PUSH"
+./turbine.yaml:  other:
+./turbine.yaml:    -
+./turbine.yaml:parameters:
+./turbine.yaml:    
+./master_clock.yaml:# Standard Log Levels (Python logging)
+./master_clock.yaml:#
+./master_clock.yaml:# 1. DEBUG (10)
+./master_clock.yaml:#   > Detailed diagnostic information.
+./master_clock.yaml:#   > Used when developing or troubleshooting.
+./master_clock.yaml:#   > Example: variable values, internal state updates.
+./master_clock.yaml:#
+./master_clock.yaml:# 2. INFO (20)
+./master_clock.yaml:#   > General runtime events to confirm things are working as expected.
+./master_clock.yaml:#   > Example: “Component X started successfully.”
+./master_clock.yaml:#
+./master_clock.yaml:# 3. WARNING (30)
+./master_clock.yaml:#   > Indicates something unexpected happened, but the program can still continue.
+./master_clock.yaml:#   > Example: “Heartbeat delayed — possible performance issue.”
+./master_clock.yaml:#
+./master_clock.yaml:# 4. ERROR (40)
+./master_clock.yaml:#   > A serious problem occurred; a specific operation failed.
+./master_clock.yaml:#   > Example: “Failed to connect to turbine controller.”
+./master_clock.yaml:#
+./master_clock.yaml:# 5. CRITICAL (50)
+./master_clock.yaml:#   > The program itself may not be able to continue.
+./master_clock.yaml:#   > Example: “Control system unresponsive — shutting down."
+./master_clock.yaml:
+./master_clock.yaml:role: "Orchestra for Sim/Main clock (this manages the time of the SIM and the Real world)."
+./master_clock.yaml:log_level: "INFO"
+./master_clock.yaml:connections:
+./master_clock.yaml:  ctrl:
+./master_clock.yaml:    endpoint: "ipc:///tmp/main.ctrl"
+./master_clock.yaml:    type: "DEALER"
+./master_clock.yaml:  tick: 
+./master_clock.yaml:    endpoint: "ipc:///tmp/clock.tick"
+./master_clock.yaml:    type: "PUB"
+./master_clock.yaml:  heartbeat:
+./master_clock.yaml:    endpoint: "ipc:///tmp/main.heartbeat"
+./master_clock.yaml:    type: "PUB"
+./master_clock.yaml:  telemetry:
+./master_clock.yaml:    endpoint: "ipc:///tmp/main.telemetry"
+./master_clock.yaml:    type: "PUB"
+./master_clock.yaml:  in: 
+./master_clock.yaml:    -
+./master_clock.yaml:  out:
+./master_clock.yaml:    -
+./master_clock.yaml:  other:
+./master_clock.yaml:    -
+./master_clock.yaml:parameters:
+./master_clock.yaml:    
+./reactor.yaml:# Standard Log Levels (Python logging)
+./reactor.yaml:#
+./reactor.yaml:# 1. DEBUG (10)
+./reactor.yaml:#   > Detailed diagnostic information.
+./reactor.yaml:#   > Used when developing or troubleshooting.
+./reactor.yaml:#   > Example: variable values, internal state updates.
+./reactor.yaml:#
+./reactor.yaml:# 2. INFO (20)
+./reactor.yaml:#   > General runtime events to confirm things are working as expected.
+./reactor.yaml:#   > Example: “Component X started successfully.”
+./reactor.yaml:#
+./reactor.yaml:# 3. WARNING (30)
+./reactor.yaml:#   > Indicates something unexpected happened, but the program can still continue.
+./reactor.yaml:#   > Example: “Heartbeat delayed — possible performance issue.”
+./reactor.yaml:#
+./reactor.yaml:# 4. ERROR (40)
+./reactor.yaml:#   > A serious problem occurred; a specific operation failed.
+./reactor.yaml:#   > Example: “Failed to connect to turbine controller.”
+./reactor.yaml:#
+./reactor.yaml:# 5. CRITICAL (50)
+./reactor.yaml:#   > The program itself may not be able to continue.
+./reactor.yaml:#   > Example: “Control system unresponsive — shutting down."
+./reactor.yaml:
+./reactor.yaml:role: "The main reactor core (the main source of heat Generation in the system)."
+./reactor.yaml:log_level: "INFO"
+./reactor.yaml:connections:
+./reactor.yaml:  ctrl:
+./reactor.yaml:    endpoint: "ipc:///tmp/main.ctrl"
+./reactor.yaml:    type: "DEALER"
+./reactor.yaml:  tick: 
+./reactor.yaml:    endpoint: "ipc:///tmp/clock.tick"
+./reactor.yaml:    type: "SUB"
+./reactor.yaml:  heartbeat:
+./reactor.yaml:    endpoint: "ipc:///tmp/main.heartbeat"
+./reactor.yaml:    type: "PUB"
+./reactor.yaml:  telemetry:
+./reactor.yaml:    endpoint: "ipc:///tmp/main.telemetry"
+./reactor.yaml:    type: "PUB"
+./reactor.yaml:  in: 
+./reactor.yaml:    -
+./reactor.yaml:      name: "reactor_core"
+./reactor.yaml:      endpoint: "ipc:///tmp/reactor_core.connection"
+./reactor.yaml:      type: "PULL"
+./reactor.yaml:  out:
+./reactor.yaml:    -
+./reactor.yaml:      name: "primary_coolant"
+./reactor.yaml:      endpoint: "ipc:///tmp/primary_coolant.connection"
+./reactor.yaml:      type: "PUSH"
+./reactor.yaml:  other:
+./reactor.yaml:    -
+./reactor.yaml:parameters:
+./reactor.yaml:  # =====================================================
+./reactor.yaml:  # REACTOR CORE BASICS
+./reactor.yaml:  # =====================================================
+./reactor.yaml:  P_rated_MW: 
+./reactor.yaml:    value: 3400.0
+./reactor.yaml:    random: false
+./reactor.yaml:
+./reactor.yaml:  phi_nominal: 
+./reactor.yaml:    value: 1.0
+./reactor.yaml:    random: true
+./reactor.yaml:    min: 0.8
+./reactor.yaml:    max: 1.2
+./reactor.yaml:
+./reactor.yaml:  Lambda: 
+./reactor.yaml:    value: 1.0e-5
+./reactor.yaml:    random: false
+./reactor.yaml:
+./reactor.yaml:  beta_i:                     # Delayed neutron fractions (fixed)
+./reactor.yaml:    value: 
+./reactor.yaml:      - 0.00025
+./reactor.yaml:      - 0.00125
+./reactor.yaml:      - 0.00120
+./reactor.yaml:      - 0.00260
+./reactor.yaml:      - 0.00075
+./reactor.yaml:      - 0.00045
+./reactor.yaml:    random: false
+./reactor.yaml:
+./reactor.yaml:  lambda_i:                   # Decay constants (fixed)
+./reactor.yaml:    value: 
+./reactor.yaml:      - 0.0124
+./reactor.yaml:      - 0.0305
+./reactor.yaml:      - 0.1110
+./reactor.yaml:      - 0.3010
+./reactor.yaml:      - 1.1400
+./reactor.yaml:      - 3.0100
+./reactor.yaml:    random: false
+./reactor.yaml:
+./reactor.yaml:  # =====================================================
+./reactor.yaml:  # GEOMETRY & MATERIAL PROPERTIES
+./reactor.yaml:  # =====================================================
+./reactor.yaml:  N_rods: 
+./reactor.yaml:    value: 35000
+./reactor.yaml:    random: true
+./reactor.yaml:    min: 20000
+./reactor.yaml:    max: 50000
+./reactor.yaml:
+./reactor.yaml:  L_fuel: 
+./reactor.yaml:    value: 4.0
+./reactor.yaml:    random: false
+./reactor.yaml:
+./reactor.yaml:  R_f: 
+./reactor.yaml:    value: 0.0045
+./reactor.yaml:    random: false
+./reactor.yaml:
+./reactor.yaml:  t_gap: 
+./reactor.yaml:    value: 0.00008
+./reactor.yaml:    random: false
+./reactor.yaml:
+./reactor.yaml:  t_clad: 
+./reactor.yaml:    value: 0.0006
+./reactor.yaml:    random: false
+./reactor.yaml:
+./reactor.yaml:  A_heated_total: 
+./reactor.yaml:    value: 3000.0
+./reactor.yaml:    random: false
+./reactor.yaml:
+./reactor.yaml:  k_fuel: 
+./reactor.yaml:    value: 2.8
+./reactor.yaml:    random: true
+./reactor.yaml:    min: 2.5
+./reactor.yaml:    max: 3.2
+./reactor.yaml:
+./reactor.yaml:  M_fuel:
+./reactor.yaml:    value: 100.0   # MTU (metric tons uranium)
+./reactor.yaml:    random: false
+./reactor.yaml:
+./reactor.yaml:  k_clad: 
+./reactor.yaml:    value: 16.0
+./reactor.yaml:    random: true
+./reactor.yaml:    min: 15.0
+./reactor.yaml:    max: 17.0
+./reactor.yaml:
+./reactor.yaml:  h_gap: 
+./reactor.yaml:    value: 12000.0
+./reactor.yaml:    random: true
+./reactor.yaml:    min: 10000.0
+./reactor.yaml:    max: 14000.0
+./reactor.yaml:
+./reactor.yaml:  # =====================================================
+./reactor.yaml:  # THERMAL-HYDRAULICS
+./reactor.yaml:  # =====================================================
+./reactor.yaml:  flow_rate_kg_s: 
+./reactor.yaml:    value: 17000.0
+./reactor.yaml:    random: true
+./reactor.yaml:    min: 15000.0
+./reactor.yaml:    max: 19000.0
+./reactor.yaml:
+./reactor.yaml:  Tin_coolant: 
+./reactor.yaml:    value: 300.0
+./reactor.yaml:    random: true
+./reactor.yaml:    min: 290.0
+./reactor.yaml:    max: 310.0
+./reactor.yaml:
+./reactor.yaml:  P_coolant_MPa: 
+./reactor.yaml:    value: 15.5
+./reactor.yaml:    random: true
+./reactor.yaml:    min: 15.0
+./reactor.yaml:    max: 16.0
+./reactor.yaml:
+./reactor.yaml:  # rho_func: "lambda T, P: 700.0"
+./reactor.yaml:  # mu_func: "lambda T, P: 1e-4"
+./reactor.yaml:  # cp_func: "lambda T, P: 4180.0"
+./reactor.yaml:  # k_func: "lambda T, P: 0.6"
+./reactor.yaml:  # T_sat: "lambda P: 647.1"
+./reactor.yaml:  # chf_corr: "lambda P, G, x, D: 1.8e6"
+./reactor.yaml:
+./reactor.yaml:  # =====================================================
+./reactor.yaml:  # REACTIVITY FEEDBACK COEFFICIENTS
+./reactor.yaml:  # =====================================================
+./reactor.yaml:  kb: 
+./reactor.yaml:    value: -1.0e-5
+./reactor.yaml:    random: false
+./reactor.yaml:
+./reactor.yaml:  fuel_alpha: 
+./reactor.yaml:    value: -2.0e-5
+./reactor.yaml:    random: false
+./reactor.yaml:
+./reactor.yaml:  mod_alpha: 
+./reactor.yaml:    value: -1.0e-5
+./reactor.yaml:    random: false
+./reactor.yaml:
+./reactor.yaml:  void_alpha: 
+./reactor.yaml:    value: -5.0e-5
+./reactor.yaml:    random: false
+./reactor.yaml:
+./reactor.yaml:  rho_scram: 
+./reactor.yaml:    value: -5.0
+./reactor.yaml:    random: true
+./reactor.yaml:    min: -6.0
+./reactor.yaml:    max: -4.0
+./reactor.yaml:
+./reactor.yaml:  # =====================================================
+./reactor.yaml:  # CONTROL SYSTEM PARAMETERS
+./reactor.yaml:  # =====================================================
+./reactor.yaml:  control_rod_worth: 
+./reactor.yaml:    value: -7.0
+./reactor.yaml:    random: false
+./reactor.yaml:
+./reactor.yaml:  rod_speed_m_s: 
+./reactor.yaml:    value: 0.05
+./reactor.yaml:    random: true
+./reactor.yaml:    min: 0.03
+./reactor.yaml:    max: 0.07
+./reactor.yaml:
+./reactor.yaml:  rod_insertion_depth: 
+./reactor.yaml:    random: false
+./reactor.yaml:    banks:
+./reactor.yaml:      - name: "Bank A"
+./reactor.yaml:        rods: 50
+./reactor.yaml:        depth: 0.0      # In the ratio of 100% of the full length
+./reactor.yaml:        length: 4000.0     # full length
+./reactor.yaml:        worth_table: 
+./reactor.yaml:          x:
+./reactor.yaml:            - 0.0
+./reactor.yaml:            - 0.2
+./reactor.yaml:            - 0.5
+./reactor.yaml:            - 0.8
+./reactor.yaml:            - 1.0
+./reactor.yaml:          y:
+./reactor.yaml:            - 0
+./reactor.yaml:            - -200
+./reactor.yaml:            - -1200
+./reactor.yaml:            - -2500
+./reactor.yaml:            - -3000
+./reactor.yaml:        speed: 0.05     # m/s (insert/withdraw rate)
+./reactor.yaml:
+./reactor.yaml:      - name: "Bank B"
+./reactor.yaml:        rods: 50
+./reactor.yaml:        depth: 0.0
+./reactor.yaml:        length: 4000.0     # full length
+./reactor.yaml:        worth_table: 
+./reactor.yaml:          x:
+./reactor.yaml:            - 0.0
+./reactor.yaml:            - 0.2
+./reactor.yaml:            - 0.5
+./reactor.yaml:            - 0.8
+./reactor.yaml:            - 1.0
+./reactor.yaml:          y:
+./reactor.yaml:            - 0
+./reactor.yaml:            - -200
+./reactor.yaml:            - -1200
+./reactor.yaml:            - -2500
+./reactor.yaml:            - -3000
+./reactor.yaml:        speed: 0.05
+./reactor.yaml:
+./reactor.yaml:      - name: "Bank C"
+./reactor.yaml:        rods: 50
+./reactor.yaml:        depth: 0.0
+./reactor.yaml:        length: 4000.0     # full length
+./reactor.yaml:        worth_table: 
+./reactor.yaml:          x:
+./reactor.yaml:            - 0.0
+./reactor.yaml:            - 0.2
+./reactor.yaml:            - 0.5
+./reactor.yaml:            - 0.8
+./reactor.yaml:            - 1.0
+./reactor.yaml:          y:
+./reactor.yaml:            - 0
+./reactor.yaml:            - -200
+./reactor.yaml:            - -1200
+./reactor.yaml:            - -2500
+./reactor.yaml:            - -3000
+./reactor.yaml:        speed: 0.05
+./reactor.yaml:
+./reactor.yaml:      - name: "Bank D"
+./reactor.yaml:        rods: 50
+./reactor.yaml:        depth: 0.0
+./reactor.yaml:        length: 4000.0     # full length
+./reactor.yaml:        worth_table: 
+./reactor.yaml:          x:
+./reactor.yaml:            - 0.0
+./reactor.yaml:            - 0.2
+./reactor.yaml:            - 0.5
+./reactor.yaml:            - 0.8
+./reactor.yaml:            - 1.0
+./reactor.yaml:          y:
+./reactor.yaml:            - 0
+./reactor.yaml:            - -200
+./reactor.yaml:            - -1200
+./reactor.yaml:            - -2500
+./reactor.yaml:            - -3000
+./reactor.yaml:        speed: 0.05
+./reactor.yaml:
+./reactor.yaml:      - name: "Bank E"
+./reactor.yaml:        rods: 50
+./reactor.yaml:        depth: 0.0
+./reactor.yaml:        length: 4000.0     # full length
+./reactor.yaml:        worth_table: 
+./reactor.yaml:          x:
+./reactor.yaml:            - 0.0
+./reactor.yaml:            - 0.2
+./reactor.yaml:            - 0.5
+./reactor.yaml:            - 0.8
+./reactor.yaml:            - 1.0
+./reactor.yaml:          y:
+./reactor.yaml:            - 0
+./reactor.yaml:            - -200
+./reactor.yaml:            - -1200
+./reactor.yaml:            - -2500
+./reactor.yaml:            - -3000
+./reactor.yaml:        speed: 0.05
+./reactor.yaml:
+./reactor.yaml:      - name: "Bank F"
+./reactor.yaml:        rods: 50
+./reactor.yaml:        depth: 0.0
+./reactor.yaml:        length: 4000.0     # full length
+./reactor.yaml:        worth_table: 
+./reactor.yaml:          x:
+./reactor.yaml:            - 0.0
+./reactor.yaml:            - 0.2
+./reactor.yaml:            - 0.5
+./reactor.yaml:            - 0.8
+./reactor.yaml:            - 1.0
+./reactor.yaml:          y:
+./reactor.yaml:            - 0
+./reactor.yaml:            - -200
+./reactor.yaml:            - -1200
+./reactor.yaml:            - -2500
+./reactor.yaml:            - -3000
+./reactor.yaml:        speed: 0.05
+./reactor.yaml:
+./reactor.yaml:  # =====================================================
+./reactor.yaml:  # BURNUP & FUEL MANAGEMENT
+./reactor.yaml:  # =====================================================
+./reactor.yaml:  burnup: 
+./reactor.yaml:    value: 0.0
+./reactor.yaml:    random: true
+./reactor.yaml:    min: 0.0
+./reactor.yaml:    max: 40000.0
+./reactor.yaml:
+./reactor.yaml:  BU_coeff: 
+./reactor.yaml:    value: -1.0e-5
+./reactor.yaml:    random: false
+./reactor.yaml:
+./reactor.yaml:  cycle_length_MWd: 
+./reactor.yaml:    value: 40000.0
+./reactor.yaml:    random: false
+./reactor.yaml:
+./reactor.yaml:  # =====================================================
+./reactor.yaml:  # TIME-STEP SETTINGS
+./reactor.yaml:  # =====================================================
+./reactor.yaml:  dt: 
+./reactor.yaml:    value: 1e-5
+./reactor.yaml:    random: false
+./reactor.yaml:
+./reactor.yaml:  DNBR_limit:
+./reactor.yaml:    value: 1.3
+./reactor.yaml:    random: false
+./reactor.yaml:
+./reactor.yaml:  PCT_max_C:
+./reactor.yaml:    value: 1200.0
+./reactor.yaml:    random: false
+./reactor.yaml:
+./reactor.yaml:  LHGR_limit_kW_m:
+./reactor.yaml:    value: 20.0
+./reactor.yaml:    random: false
+./reactor.yaml:
+./reactor.yaml:  # =====================================================
+./reactor.yaml:  # MODERATOR TEMPERATURE STRATEGY
+./reactor.yaml:  # =====================================================
+./reactor.yaml:  # Strategy for estimating moderator temperature.
+./reactor.yaml:  # Options:
+./reactor.yaml:  #   "Tin"   = use coolant inlet temperature
+./reactor.yaml:  #   "Tout"  = use coolant outlet temperature
+./reactor.yaml:  #   "avg"   = use average of inlet/outlet
+./reactor.yaml:  T_mod_strategy:
+./reactor.yaml:    value: "avg"
+./reactor.yaml:    random: false
+./reactor.yaml:
+./reactor.yaml:
+./reactor.yaml:  # =====================================================
+./reactor.yaml:  # CONTROL SYSTEM LIVE INPUTS (Dynamic Placeholders)
+./reactor.yaml:  # =====================================================
+./reactor.yaml:
+./reactor.yaml:  boron_ppm:
+./reactor.yaml:    value: 2000.0    # ppm, will be updated from CVCS
+./reactor.yaml:    random: false
+./reactor.yaml:
+./reactor.yaml:  scram_flag:
+./reactor.yaml:    value: false     # boolean, updated by control system
+./reactor.yaml:    random: false    # no randomization, only external signal
+./reactor.yaml:
+./reactor.yaml:  # =====================================================
+./reactor.yaml:  # REACTOR CORE STATE VARIABLES (Dynamic, Internal)
+./reactor.yaml:  # =====================================================
+./reactor.yaml:
+./reactor.yaml:  phi:
+./reactor.yaml:    value: 1.0       # normalized neutron flux
+./reactor.yaml:    random: false    # evolves from point-kinetics ODE
+./reactor.yaml:
+./reactor.yaml:  C_i:
+./reactor.yaml:    value: [0, 0, 0, 0, 0, 0]   # precursor groups
+./reactor.yaml:    random: false                # evolves from ODE
+./reactor.yaml:
+./reactor.yaml:  T_fuel:
+./reactor.yaml:    value: 650.0     # K, initial guess
+./reactor.yaml:    random: true
+./reactor.yaml:    min: 600.0
+./reactor.yaml:    max: 800.0
+./reactor.yaml:
+./reactor.yaml:  T_clad:
+./reactor.yaml:    value: 325.0     # K, initial guess
+./reactor.yaml:    random: true
+./reactor.yaml:    min: 300.0
+./reactor.yaml:    max: 350.0
+./reactor.yaml:
+./reactor.yaml:  T_mod:
+./reactor.yaml:    value: 310.0     # K, depends on Tin/Tout strategy
+./reactor.yaml:    random: true
+./reactor.yaml:    min: 300.0
+./reactor.yaml:    max: 320.0
+./reactor.yaml:
+./reactor.yaml:  PCT:
+./reactor.yaml:    value: 359.0
+./reactor.yaml:    random: false
+./runner.yaml:# Standard Log Levels (Python logging)
+./runner.yaml:#
+./runner.yaml:# 1. DEBUG (10)
+./runner.yaml:#   > Detailed diagnostic information.
+./runner.yaml:#   > Used when developing or troubleshooting.
+./runner.yaml:#   > Example: variable values, internal state updates.
+./runner.yaml:#
+./runner.yaml:# 2. INFO (20)
+./runner.yaml:#   > General runtime events to confirm things are working as expected.
+./runner.yaml:#   > Example: “Component X started successfully.”
+./runner.yaml:#
+./runner.yaml:# 3. WARNING (30)
+./runner.yaml:#   > Indicates something unexpected happened, but the program can still continue.
+./runner.yaml:#   > Example: “Heartbeat delayed — possible performance issue.”
+./runner.yaml:#
+./runner.yaml:# 4. ERROR (40)
+./runner.yaml:#   > A serious problem occurred; a specific operation failed.
+./runner.yaml:#   > Example: “Failed to connect to turbine controller.”
+./runner.yaml:#
+./runner.yaml:# 5. CRITICAL (50)
+./runner.yaml:#   > The program itself may not be able to continue.
+./runner.yaml:#   > Example: “Control system unresponsive — shutting down."
+./runner.yaml:
+./runner.yaml:# Main Runner ...
+./runner.yaml:path: "runner.py"
+./runner.yaml:args: []
+./runner.yaml:role: "The main Bootstrap of this system."
+./runner.yaml:autorestart: true
+./runner.yaml:critical: true
+./runner.yaml:log_level: "INFO"
+./runner.yaml:connections:
+./runner.yaml:  ctrl:
+./runner.yaml:    endpoint: "ipc:///tmp/main.ctrl"
+./runner.yaml:    type: "DEALER"
+./runner.yaml:  tick: 
+./runner.yaml:    endpoint: "ipc:///tmp/clock.tick"
+./runner.yaml:    type: "SUB"
+./runner.yaml:  heartbeat:
+./runner.yaml:    endpoint: "ipc:///tmp/main.heartbeat"
+./runner.yaml:    type: "PUB"
+./runner.yaml:  telemetry:
+./runner.yaml:    endpoint: "ipc:///tmp/main.telemetry"
+./runner.yaml:    type: "PUB"
+./runner.yaml:  in: 
+./runner.yaml:  out:
+./runner.yaml:    - name: "runner"
+./runner.yaml:      endpoint: "ipc:///tmp/runner.connection"
+./runner.yaml:      type: "PUSH"
+./runner.yaml:  other:
+./runner.yaml:spawn_list:
+./runner.yaml:  foreground:
+./runner.yaml:    - name:  "control_safety"
+./runner.yaml:      path: "components/control_safety/control_system.py"
+./runner.yaml:      args: ["-u"]
+./runner.yaml:      role: "cli & user interaction (this helps in the organiging of the Entire system and lets the user control using cli like interface)."
+./runner.yaml:      autorestart: true
+./runner.yaml:      critical: true
+./runner.yaml:
+./runner.yaml:  background:
+./runner.yaml:    - name: "master_clock"
+./runner.yaml:      path: "components/master_clock/master_clock.py"
+./runner.yaml:      args: ["-u"]
+./runner.yaml:      role: "Orchestra for Sim/Main clock (this manages the time of the SIM and the Real world)."
+./runner.yaml:      autorestart: true
+./runner.yaml:      critical: true
+./runner.yaml:
+./runner.yaml:    - name: "reactor_core"
+./runner.yaml:      path: "components/reactor_core/reactor.py"
+./runner.yaml:      args: ["-u"]
+./runner.yaml:      role: "The main reactor core (the main source of heat Generation in the system)."
+./runner.yaml:      autorestart: true
+./runner.yaml:      critical: true
+./runner.yaml:
+./runner.yaml:    - name: "primary_coolant_loop"
+./runner.yaml:      path: "components/primary_coolant_loop/coolant.py"
+./runner.yaml:      args: ["-u"]
+./runner.yaml:      role: "The main primary coolant loop system (PWR main coolant loop)."
+./runner.yaml:      autorestart: true
+./runner.yaml:      critical: true
+./runner.yaml:
+./runner.yaml:    - name: "steam_generator"
+./runner.yaml:      path: "components/steam_generator/steam_generator.py"
+./runner.yaml:      args: ["-u"]
+./runner.yaml:      role: "The main steam generator which (unpressurised water heater)."
+./runner.yaml:      autorestart: true
+./runner.yaml:      critical: true
+./runner.yaml:
+./runner.yaml:    - name: "turbine_generator"
+./runner.yaml:      path: "components/turbine_generator/turbine.py"
+./runner.yaml:      args: ["-u"]
+./runner.yaml:      role: "The main steam turbine generator (which uses the steam form the steam_generator)."
+./runner.yaml:      autorestart: true
+./runner.yaml:      critical: true
+./runner.yaml:
+./runner.yaml:    - name: "condenser_cooling"
+./runner.yaml:      path: "components/condenser_cooling/condenser.py"
+./runner.yaml:      args: ["-u"]
+./runner.yaml:      role: "The main condenser cooling system (used for cooling the steam from the turbine and convert it back to water in lower temp)."
+./runner.yaml:      autorestart: true
+./runner.yaml:      critical: true
+./runner.yaml:
+./runner.yaml:    - name: "condenser_cooling_water_source"
+./runner.yaml:      path: "components/condenser_cooling_water_source/condenser_cooling_water_source.py"
+./runner.yaml:      args: ["-u"]
+./runner.yaml:      role: "The main river like water(coolent) source, from which condenser takes the water."
+./runner.yaml:      autorestart: true
+./runner.yaml:      critical: true
+./runner.yaml:
+./runner.yaml:    - name: "grid_interface"
+./runner.yaml:      path: "components/grid_interface/grid.py"
+./runner.yaml:      args: ["-u"]
+./runner.yaml:      role: "The main Electrical Grid interface which is connected to the outside for Electrical conversion."
+./runner.yaml:      autorestart: true
+./runner.yaml:      critical: true
+./runner.yaml:
+./runner.yaml:    - name: "telemetry_logging"
+./runner.yaml:      path: "components/telemetry_logging/telemetry.py"
+./runner.yaml:      args: ["-u"]
+./runner.yaml:      role: "The main telemetry loogging system which logs all the data."
+./runner.yaml:      autorestart: true
+./runner.yaml:      critical: true
+./runner.yaml:

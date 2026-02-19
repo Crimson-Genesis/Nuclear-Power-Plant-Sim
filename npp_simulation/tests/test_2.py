@@ -1,0 +1,53 @@
+#!/usr/bin/env python
+
+import numpy as np
+import mcdc
+
+# =============================================================================
+# Set model
+# =============================================================================
+# Three slab layers with different purely-absorbing materials
+
+# Set materials (these calls normally register the material with mcdc)
+m1 = mcdc.material(capture=np.array([1.0]))
+m2 = mcdc.material(capture=np.array([1.5]))
+m3 = mcdc.material(capture=np.array([2.0]))
+
+# Set surfaces
+s1 = mcdc.surface("plane-z", z=0.0, bc="vacuum")
+s2 = mcdc.surface("plane-z", z=2.0)
+s3 = mcdc.surface("plane-z", z=4.0)
+s4 = mcdc.surface("plane-z", z=6.0, bc="vacuum")
+
+# Set cells — use keyword args and lists for materials
+mcdc.cell(surfaces=[+s1, -s2], materials=[m2])
+mcdc.cell(surfaces=[+s2, -s3], materials=[m3])
+mcdc.cell(surfaces=[+s3, -s4], materials=[m1])
+
+# =============================================================================
+# Set source
+# =============================================================================
+# Uniform isotropic source throughout the domain
+mcdc.source(z=[0.0, 6.0], isotropic=True)
+
+# =============================================================================
+# Set tally, setting, and run mcdc
+# =============================================================================
+
+# Tally: cell-average fluxes and currents
+# convert numpy arrays to plain lists to be safe with API checks
+z_grid = np.linspace(0.0, 6.0, 61).tolist()
+mu_grid = np.linspace(-1.0, 1.0, 32 + 1).tolist()
+
+mcdc.tally(
+    scores=["flux", "current"],
+    z=z_grid,
+    mu=mu_grid,
+)
+
+# Setting - ensure integer for particle count
+mcdc.setting(N_particle=int(1e3))
+
+# Run
+mcdc.run()
+

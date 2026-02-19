@@ -1,0 +1,416 @@
+# Standard Log Levels (Python logging)
+#
+# 1. DEBUG (10)
+#   > Detailed diagnostic information.
+#   > Used when developing or troubleshooting.
+#   > Example: variable values, internal state updates.
+#
+# 2. INFO (20)
+#   > General runtime events to confirm things are working as expected.
+#   > Example: “Component X started successfully.”
+#
+# 3. WARNING (30)
+#   > Indicates something unexpected happened, but the program can still continue.
+#   > Example: “Heartbeat delayed — possible performance issue.”
+#
+# 4. ERROR (40)
+#   > A serious problem occurred; a specific operation failed.
+#   > Example: “Failed to connect to turbine controller.”
+#
+# 5. CRITICAL (50)
+#   > The program itself may not be able to continue.
+#   > Example: “Control system unresponsive — shutting down."
+
+role: "The main reactor core (the main source of heat Generation in the system)."
+log_level: "INFO"
+connections:
+  ctrl:
+    endpoint: "ipc:///tmp/main.ctrl"
+    type: "DEALER"
+  tick: 
+    endpoint: "ipc:///tmp/clock.tick"
+    type: "SUB"
+  heartbeat:
+    endpoint: "ipc:///tmp/main.heartbeat"
+    type: "PUB"
+  telemetry:
+    endpoint: "ipc:///tmp/main.telemetry"
+    type: "PUB"
+  in: 
+    -
+      name: "reactor_core"
+      endpoint: "ipc:///tmp/reactor_core.connection"
+      type: "PULL"
+  out:
+    -
+      name: "primary_coolant"
+      endpoint: "ipc:///tmp/primary_coolant.connection"
+      type: "PUSH"
+  other:
+    -
+parameters:
+  # =====================================================
+  # REACTOR CORE BASICS
+  # =====================================================
+  P_rated_MW: 
+    value: 3400.0
+    random: false
+
+  phi_nominal: 
+    value: 1.0
+    random: true
+    min: 0.8
+    max: 1.2
+
+  Lambda: 
+    value: 1.0e-5
+    random: false
+
+  beta_i:                     # Delayed neutron fractions (fixed)
+    value: 
+      - 0.00025
+      - 0.00125
+      - 0.00120
+      - 0.00260
+      - 0.00075
+      - 0.00045
+    random: false
+
+  lambda_i:                   # Decay constants (fixed)
+    value: 
+      - 0.0124
+      - 0.0305
+      - 0.1110
+      - 0.3010
+      - 1.1400
+      - 3.0100
+    random: false
+
+  # =====================================================
+  # GEOMETRY & MATERIAL PROPERTIES
+  # =====================================================
+  N_rods: 
+    value: 35000
+    random: true
+    min: 20000
+    max: 50000
+
+  L_fuel: 
+    value: 4.0
+    random: false
+
+  R_f: 
+    value: 0.0045
+    random: false
+
+  t_gap: 
+    value: 0.00008
+    random: false
+
+  t_clad: 
+    value: 0.0006
+    random: false
+
+  A_heated_total: 
+    value: 3000.0
+    random: false
+
+  k_fuel: 
+    value: 2.8
+    random: true
+    min: 2.5
+    max: 3.2
+
+  M_fuel:
+    value: 100.0   # MTU (metric tons uranium)
+    random: false
+
+  k_clad: 
+    value: 16.0
+    random: true
+    min: 15.0
+    max: 17.0
+
+  h_gap: 
+    value: 12000.0
+    random: true
+    min: 10000.0
+    max: 14000.0
+
+  # =====================================================
+  # THERMAL-HYDRAULICS
+  # =====================================================
+  flow_rate_kg_s: 
+    value: 17000.0
+    random: true
+    min: 15000.0
+    max: 19000.0
+
+  Tin_coolant: 
+    value: 300.0
+    random: true
+    min: 290.0
+    max: 310.0
+
+  P_coolant_MPa: 
+    value: 15.5
+    random: true
+    min: 15.0
+    max: 16.0
+
+  # rho_func: "lambda T, P: 700.0"
+  # mu_func: "lambda T, P: 1e-4"
+  # cp_func: "lambda T, P: 4180.0"
+  # k_func: "lambda T, P: 0.6"
+  # T_sat: "lambda P: 647.1"
+  # chf_corr: "lambda P, G, x, D: 1.8e6"
+
+  # =====================================================
+  # REACTIVITY FEEDBACK COEFFICIENTS
+  # =====================================================
+  kb: 
+    value: -1.0e-5
+    random: false
+
+  fuel_alpha: 
+    value: -2.0e-5
+    random: false
+
+  mod_alpha: 
+    value: -1.0e-5
+    random: false
+
+  void_alpha: 
+    value: -5.0e-5
+    random: false
+
+  rho_scram: 
+    value: -5.0
+    random: true
+    min: -6.0
+    max: -4.0
+
+  # =====================================================
+  # CONTROL SYSTEM PARAMETERS
+  # =====================================================
+  control_rod_worth: 
+    value: -7.0
+    random: false
+
+  rod_speed_m_s: 
+    value: 0.05
+    random: true
+    min: 0.03
+    max: 0.07
+
+  rod_insertion_depth: 
+    random: false
+    banks:
+      - name: "Bank A"
+        rods: 50
+        depth: 0.0      # In the ratio of 100% of the full length
+        length: 4000.0     # full length
+        worth_table: 
+          x:
+            - 0.0
+            - 0.2
+            - 0.5
+            - 0.8
+            - 1.0
+          y:
+            - 0
+            - -200
+            - -1200
+            - -2500
+            - -3000
+        speed: 0.05     # m/s (insert/withdraw rate)
+
+      - name: "Bank B"
+        rods: 50
+        depth: 0.0
+        length: 4000.0     # full length
+        worth_table: 
+          x:
+            - 0.0
+            - 0.2
+            - 0.5
+            - 0.8
+            - 1.0
+          y:
+            - 0
+            - -200
+            - -1200
+            - -2500
+            - -3000
+        speed: 0.05
+
+      - name: "Bank C"
+        rods: 50
+        depth: 0.0
+        length: 4000.0     # full length
+        worth_table: 
+          x:
+            - 0.0
+            - 0.2
+            - 0.5
+            - 0.8
+            - 1.0
+          y:
+            - 0
+            - -200
+            - -1200
+            - -2500
+            - -3000
+        speed: 0.05
+
+      - name: "Bank D"
+        rods: 50
+        depth: 0.0
+        length: 4000.0     # full length
+        worth_table: 
+          x:
+            - 0.0
+            - 0.2
+            - 0.5
+            - 0.8
+            - 1.0
+          y:
+            - 0
+            - -200
+            - -1200
+            - -2500
+            - -3000
+        speed: 0.05
+
+      - name: "Bank E"
+        rods: 50
+        depth: 0.0
+        length: 4000.0     # full length
+        worth_table: 
+          x:
+            - 0.0
+            - 0.2
+            - 0.5
+            - 0.8
+            - 1.0
+          y:
+            - 0
+            - -200
+            - -1200
+            - -2500
+            - -3000
+        speed: 0.05
+
+      - name: "Bank F"
+        rods: 50
+        depth: 0.0
+        length: 4000.0     # full length
+        worth_table: 
+          x:
+            - 0.0
+            - 0.2
+            - 0.5
+            - 0.8
+            - 1.0
+          y:
+            - 0
+            - -200
+            - -1200
+            - -2500
+            - -3000
+        speed: 0.05
+
+  # =====================================================
+  # BURNUP & FUEL MANAGEMENT
+  # =====================================================
+  burnup: 
+    value: 0.0
+    random: true
+    min: 0.0
+    max: 40000.0
+
+  BU_coeff: 
+    value: -1.0e-5
+    random: false
+
+  cycle_length_MWd: 
+    value: 40000.0
+    random: false
+
+  # =====================================================
+  # TIME-STEP SETTINGS
+  # =====================================================
+  dt: 
+    value: 1e-5
+    random: false
+
+  DNBR_limit:
+    value: 1.3
+    random: false
+
+  PCT_max_C:
+    value: 1200.0
+    random: false
+
+  LHGR_limit_kW_m:
+    value: 20.0
+    random: false
+
+  # =====================================================
+  # MODERATOR TEMPERATURE STRATEGY
+  # =====================================================
+  # Strategy for estimating moderator temperature.
+  # Options:
+  #   "Tin"   = use coolant inlet temperature
+  #   "Tout"  = use coolant outlet temperature
+  #   "avg"   = use average of inlet/outlet
+  T_mod_strategy:
+    value: "avg"
+    random: false
+
+
+  # =====================================================
+  # CONTROL SYSTEM LIVE INPUTS (Dynamic Placeholders)
+  # =====================================================
+
+  boron_ppm:
+    value: 2000.0    # ppm, will be updated from CVCS
+    random: false
+
+  scram_flag:
+    value: false     # boolean, updated by control system
+    random: false    # no randomization, only external signal
+
+  # =====================================================
+  # REACTOR CORE STATE VARIABLES (Dynamic, Internal)
+  # =====================================================
+
+  phi:
+    value: 1.0       # normalized neutron flux
+    random: false    # evolves from point-kinetics ODE
+
+  C_i:
+    value: [0, 0, 0, 0, 0, 0]   # precursor groups
+    random: false                # evolves from ODE
+
+  T_fuel:
+    value: 650.0     # K, initial guess
+    random: true
+    min: 600.0
+    max: 800.0
+
+  T_clad:
+    value: 325.0     # K, initial guess
+    random: true
+    min: 300.0
+    max: 350.0
+
+  T_mod:
+    value: 310.0     # K, depends on Tin/Tout strategy
+    random: true
+    min: 300.0
+    max: 320.0
+
+  PCT:
+    value: 359.0
+    random: false

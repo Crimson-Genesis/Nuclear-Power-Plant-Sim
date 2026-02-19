@@ -1,0 +1,46 @@
+# Standard Log Levels (Python logging)
+#
+# 1. DEBUG (10)
+#   > Detailed diagnostic information.
+#   > Used when developing or troubleshooting.
+#   > Example: variable values, internal state updates.
+#
+# 2. INFO (20)
+#   > General runtime events to confirm things are working as expected.
+#   > Example: “Component X started successfully.”
+#
+# 3. WARNING (30)
+#   > Indicates something unexpected happened, but the program can still continue.
+#   > Example: “Heartbeat delayed — possible performance issue.”
+#
+# 4. ERROR (40)
+#   > A serious problem occurred; a specific operation failed.
+#   > Example: “Failed to connect to turbine controller.”
+#
+# 5. CRITICAL (50)
+#   > The program itself may not be able to continue.
+#   > Example: “Control system unresponsive — shutting down."
+
+role: "Orchestra for Sim/Main clock (this manages the time of the SIM and the Real world)."
+log_level: "INFO"
+connections:
+  ctrl:
+    endpoint: "ipc:///tmp/main.ctrl"
+    type: "DEALER"
+  tick: 
+    endpoint: "ipc:///tmp/clock.tick"
+    type: "PUB"
+  heartbeat:
+    endpoint: "ipc:///tmp/main.heartbeat"
+    type: "PUB"
+  telemetry:
+    endpoint: "ipc:///tmp/main.telemetry"
+    type: "PUB"
+  in: 
+    -
+  out:
+    -
+  other:
+    -
+parameters:
+    

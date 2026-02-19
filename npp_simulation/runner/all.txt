@@ -1,0 +1,314 @@
+./test_3.py:#!/usr/bin/env python
+./test_3.py:#!/usr/bin/env python
+./test_3.py:from prompt_toolkit.application import Application
+./test_3.py:from prompt_toolkit.key_binding import KeyBindings
+./test_3.py:from prompt_toolkit.layout import Layout, HSplit, VSplit, Window
+./test_3.py:from prompt_toolkit.widgets import TextArea
+./test_3.py:from prompt_toolkit.history import InMemoryHistory
+./test_3.py:from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
+./test_3.py:from prompt_toolkit import PromptSession
+./test_3.py:import asyncio
+./test_3.py:
+./test_3.py:class TerminalTUI:
+./test_3.py:    def __init__(self):
+./test_3.py:        # Left pane: logs
+./test_3.py:        self.left_pane = TextArea(
+./test_3.py:            text="System Logs:\n",
+./test_3.py:            scrollbar=True,
+./test_3.py:            focusable=False,
+./test_3.py:            read_only=True,
+./test_3.py:        )
+./test_3.py:
+./test_3.py:        # Right top pane: output
+./test_3.py:        self.output_pane = TextArea(
+./test_3.py:            scrollbar=True,
+./test_3.py:            multiline=True,
+./test_3.py:            read_only=True,
+./test_3.py:        )
+./test_3.py:
+./test_3.py:        # History for PromptSession
+./test_3.py:        self.history = InMemoryHistory()
+./test_3.py:        self.session = PromptSession(history=self.history, auto_suggest=AutoSuggestFromHistory())
+./test_3.py:
+./test_3.py:        # Right bottom placeholder window
+./test_3.py:        self.input_placeholder = Window(height=1, char="─", style="class:line")
+./test_3.py:
+./test_3.py:        # Layout
+./test_3.py:        self.root_container = VSplit(
+./test_3.py:            [
+./test_3.py:                self.left_pane,
+./test_3.py:                Window(width=1, char="│", style="class:line"),
+./test_3.py:                HSplit(
+./test_3.py:                    [
+./test_3.py:                        self.output_pane,
+./test_3.py:                        self.input_placeholder,  # visual separator
+./test_3.py:                    ]
+./test_3.py:                ),
+./test_3.py:            ]
+./test_3.py:        )
+./test_3.py:
+./test_3.py:        self.layout = Layout(self.root_container)
+./test_3.py:        self.kb = KeyBindings()
+./test_3.py:
+./test_3.py:        @self.kb.add("c-c")
+./test_3.py:        def _(event):
+./test_3.py:            event.app.exit()
+./test_3.py:
+./test_3.py:        self.app = Application(layout=self.layout, key_bindings=self.kb, full_screen=True, refresh_interval=0.1)
+./test_3.py:
+./test_3.py:    async def run(self):
+./test_3.py:        # Run the Application in the background
+./test_3.py:        app_task = asyncio.create_task(self.app.run_async())
+./test_3.py:
+./test_3.py:        # Input loop using PromptSession
+./test_3.py:        while True:
+./test_3.py:            try:
+./test_3.py:                text = await self.session.prompt_async("> ")
+./test_3.py:                if text.strip():
+./test_3.py:                    self.output_pane.buffer.insert_text(f"> {text}\n", move_cursor=True)
+./test_3.py:            except (EOFError, KeyboardInterrupt):
+./test_3.py:                break
+./test_3.py:
+./test_3.py:        app_task.cancel()
+./test_3.py:
+./test_3.py:
+./test_3.py:if __name__ == "__main__":
+./test_3.py:    asyncio.run(TerminalTUI().run())
+./test_3.py:
+./test.py:#!/usr/bin/env python
+./test.py:
+./test.py:import glob
+./test.py:#
+./test.py:#
+./test.py:# # sps = max([int(i.split(".")[1]) for i in sorted(glob.glob("statepoint.*.h5"))])
+./test.py:# # # return sps[-1] if sps else None
+./test.py:# # print(sps)
+./test.py:# #
+./test.py:#
+./test.py:# def latest_statepoint():
+./test.py:#     sps = sorted(glob.glob("statepoint.*.h5"))
+./test.py:#     sps_max_batch = max([int(i.split(".")[1]) for i in sps])
+./test.py:#     return (sps[-1] if sps else None, sps_max_batch,)
+./test.py:#
+./test.py:# latest_statepoint()
+./test.py:
+./test.py:import pickle
+./test.py:
+./test.py:files = glob.glob("test_data_log_file-*.pkl")
+./test.py:data = list()
+./test.py:
+./test.py:for file in files:
+./test.py:    with open(file, "rb") as f:
+./test.py:        data.append(pickle.load(f))
+./test.py:with open("datatest.txt","a") as f:
+./test.py:    f.write(str(data))
+./test.py:
+./test.py:print(data[0])
+./test_2.py:#!/usr/bin/env python
+./test_2.py:
+./test_2.py:import zmq
+./test_2.py:import time
+./test_2.py:import random
+./test_2.py:
+./test_2.py:
+./test_2.py:def main():
+./test_2.py:    ed = "ipc:///tmp/main.ctrl"
+./test_2.py:    cox = zmq.Context()
+./test_2.py:    soc = cox.socket(zmq.SUB)
+./test_2.py:    soc.connect(ed)
+./test_2.py:    soc.setsockopt_string(zmq.SUBSCRIBE, "")
+./test_2.py:
+./test_2.py:    while True:
+./test_2.py:        try:
+./test_2.py:            data = soc.recv_json()
+./test_2.py:            print(data)
+./test_2.py:        except zmq.Again:
+./test_2.py:            ...
+./test_2.py:        time.sleep(1)
+./test_2.py:
+./test_2.py:main()
+./runner.py:#!/usr/bin/env python
+./runner.py:
+./runner.py:import os
+./runner.py:import sys
+./runner.py:import subprocess
+./runner.py:import yaml
+./runner.py:import threading
+./runner.py:import zmq
+./runner.py:from pydantic import BaseModel, ValidationError
+./runner.py:from typing import List
+./runner.py:from pprint import pprint
+./runner.py:import time, random, json
+./runner.py:
+./runner.py:sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+./runner.py:from lib.lib import *
+./runner.py:
+./runner.py:
+./runner.py:class Config(BaseModel):
+./runner.py:    name: str
+./runner.py:    version: int
+./runner.py:    features: List[str]
+./runner.py:
+./runner.py:
+./runner.py:class Runner:
+./runner.py:    def __init__(self):
+./runner.py:        with open(config_file_name(), "r") as file:
+./runner.py:            self.config = yaml.safe_load(file)
+./runner.py:        # pprint(self.config)
+./runner.py:
+./runner.py:        self.ctx = zmq.Context()
+./runner.py:
+./runner.py:        self.ctrl_endpoint = self.config["connections"]["ctrl"]["endpoint"]
+./runner.py:        self.tick_endpoint = self.config["connections"]["tick"]["endpoint"]
+./runner.py:        self.heartbeat_endpoint = self.config["connections"]["heartbeat"]["endpoint"]
+./runner.py:        self.telemetry_endpoint = self.config["connections"]["telemetry"]["endpoint"]
+./runner.py:        self.spawn_list = self.config["spawn_list"]
+./runner.py:        self.proc_dict = {"background": dict(), "foreground": dict()}
+./runner.py:
+./runner.py:        self.ctrl = self.ctx.socket(
+./runner.py:            getattr(zmq, self.config["connections"]["ctrl"]["type"])
+./runner.py:        )
+./runner.py:        self.name = get_name()
+./runner.py:        self.ctrl.setsockopt_string(zmq.IDENTITY, self.name)
+./runner.py:
+./runner.py:        self.tick = self.ctx.socket(
+./runner.py:            getattr(zmq, self.config["connections"]["tick"]["type"])
+./runner.py:        )
+./runner.py:        self.tick.setsockopt_string(zmq.SUBSCRIBE, "")
+./runner.py:        self.heartbeat = self.ctx.socket(
+./runner.py:            getattr(zmq, self.config["connections"]["heartbeat"]["type"])
+./runner.py:        )
+./runner.py:        self.telemetry = self.ctx.socket(
+./runner.py:            getattr(zmq, self.config["connections"]["telemetry"]["type"])
+./runner.py:        )
+./runner.py:
+./runner.py:        get_connection_object(self.heartbeat, self.config["connections"]["heartbeat"]["type"])(
+./runner.py:            self.heartbeat_endpoint
+./runner.py:        )
+./runner.py:
+./runner.py:        self.shutdown = False
+./runner.py:
+./runner.py:    def establish_connections(self):
+./runner.py:        get_connection_object(self.tick, self.config["connections"]["tick"]["type"])(self.tick_endpoint)
+./runner.py:        get_connection_object(self.telemetry, self.config["connections"]["telemetry"]["type"])(self.telemetry_endpoint)
+./runner.py:        self.heartbeat_thread.start()
+./runner.py:        return "Tick and Telemetry"
+./runner.py:
+./runner.py:    def start(self):
+./runner.py:        try:
+./runner.py:            self.foreground_spawner()
+./runner.py:            get_connection_object(
+./runner.py:                self.ctrl, self.config["connections"]["ctrl"]["type"]
+./runner.py:            )(self.ctrl_endpoint)
+./runner.py:            # self.ctrl.connect(self.ctrl_endpoint)
+./runner.py:            self.background_spawner()
+./runner.py:            self.heartbeat_thread = threading.Thread(target=self._heartbeat_loop, daemon=True)
+./runner.py:            self.control_thread = threading.Thread(target=self._control_loop, daemon=True)
+./runner.py:            self.control_thread.start()
+./runner.py:            time.sleep(1)
+./runner.py:            self.send_msg("Start Establish-ING Connections", type_="command", command="establish_connections")
+./runner.py:            while True:
+./runner.py:                if self.shutdown:
+./runner.py:                    print("Good Bye 😄")
+./runner.py:                    break
+./runner.py:                time.sleep(1)
+./runner.py:        except KeyboardInterrupt:
+./runner.py:            self.terminate_background_spawns()
+./runner.py:
+./runner.py:    def background_spawner(self):
+./runner.py:        for proc in self.spawn_list["background"]:
+./runner.py:            self.proc_dict["background"][proc["name"]] = subprocess.Popen(
+./runner.py:                ["python", *proc["args"], get_file(proc["path"])],
+./runner.py:                stdin=subprocess.DEVNULL,
+./runner.py:                stdout=subprocess.PIPE,
+./runner.py:                stderr=subprocess.PIPE,
+./runner.py:            )
+./runner.py:            self.send_log_msg(f"{proc['name']} - Started")
+./runner.py:            time.sleep(0.5)
+./runner.py:
+./runner.py:    def subProc_dataMoniter(self):
+./runner.py:        while True:
+./runner.py:            for proc_name, proc in self.proc_dict["background"].items():
+./runner.py:                procout = [i for i in proc.stdout]
+./runner.py:                procerr = [i for i in proc.stderr]
+./runner.py:                if procout and procerr:
+./runner.py:                    self.send_msg(f"Name: {proc_name} | Out: {procout} | Err: {procerr}", type_="proc_out/err")
+./runner.py:                elif procout:
+./runner.py:                    self.send_msg(f"Name: {proc_name} | Out: {procout}", type_="proc_out/err")
+./runner.py:                elif procerr:
+./runner.py:                    self.send_msg(f"Name: {proc_name} | Err: {procerr}", type_="proc_out/err")
+./runner.py:            time.sleep(0.5)
+./runner.py:
+./runner.py:    def terminate_background_spawns(self):
+./runner.py:        for proc_name,proc in self.proc_dict["background"].items():
+./runner.py:            proc.terminate()
+./runner.py:            self.send_log_msg(f"Termination Complete - {proc_name}")
+./runner.py:            time.sleep(0.5)
+./runner.py:
+./runner.py:    def foreground_spawner(self):
+./runner.py:        for proc in self.spawn_list["foreground"]:
+./runner.py:            self.proc_dict["foreground"][proc["name"]] = subprocess.Popen(
+./runner.py:                ["python", *proc["args"], get_file(proc["path"])],
+./runner.py:                stdin=sys.stdin,
+./runner.py:                stdout=sys.stdout,
+./runner.py:                stderr=sys.stderr,
+./runner.py:            )
+./runner.py:        time.sleep(3)
+./runner.py:
+./runner.py:    def terminate_foreground_spawns(self):
+./runner.py:        for proc in self.proc_dict["foreground"].values():
+./runner.py:            proc.terminate()
+./runner.py:            time.sleep(0.5)
+./runner.py:
+./runner.py:    def _tick_loop(self): ...
+./runner.py:
+./runner.py:    def _control_loop(self):
+./runner.py:        self.running = True
+./runner.py:        while self.running:
+./runner.py:            try:
+./runner.py:                identity, msg = self.ctrl.recv_multipart(flags=zmq.NOBLOCK)
+./runner.py:                if identity or msg:
+./runner.py:                    decoded_msg = json.loads(msg.decode())
+./runner.py:                    if decoded_msg["type"] in ("command",):
+./runner.py:                        if decoded_msg["command"] == "shutdown":
+./runner.py:                            self._termination_start()
+./runner.py:                    if decoded_msg["type"] in ("command",) and decoded_msg["command"] == "establish_connections":
+./runner.py:                        cc = self.establish_connections()
+./runner.py:                        self.send_msg(f"Establish-ED Connections of {cc} at {self.name}", type_="status")
+./runner.py:            except zmq.Again:
+./runner.py:                pass
+./runner.py:            time.sleep(2)
+./runner.py:
+./runner.py:    def send_msg(self, msg, type_="status", **kwargs):
+./runner.py:        data = {"type": type_, "name": self.name, "msg": msg, **kwargs}
+./runner.py:        self.ctrl.send_multipart([b"", json.dumps(data).encode()])
+./runner.py:
+./runner.py:    def send_log_msg(self, msg: str):
+./runner.py:        data = {"type": "log", "name": self.name, "msg": msg}
+./runner.py:        self.ctrl.send_multipart([b"", json.dumps(data).encode()])
+./runner.py:
+./runner.py:    def _heartbeat_loop(self):
+./runner.py:        while True:
+./runner.py:            # print("Heartbeat - Okey")
+./runner.py:            time.sleep(2)
+./runner.py:
+./runner.py:    def _termination_start(self):
+./runner.py:        self.terminate_background_spawns()
+./runner.py:        self.send_log_msg("Background Process Termination Complete...")
+./runner.py:        self.send_log_msg("Main Control System will be terminated in 5s.")
+./runner.py:        for i in range(5, -1, -1):
+./runner.py:            self.send_log_msg(f"{i}s")
+./runner.py:            time.sleep(1)
+./runner.py:        self.send_msg(
+./runner.py:            msg="Control System Shutdown Sequence",
+./runner.py:            type_="command",
+./runner.py:            command="control-system-shutdown",
+./runner.py:        )
+./runner.py:        self.shutdown = True
+./runner.py:
+./runner.py:
+./runner.py:if __name__ == "__main__":
+./runner.py:    runner = Runner()
+./runner.py:    runner.start()
+./runner.py:else:
+./runner.py:    ...

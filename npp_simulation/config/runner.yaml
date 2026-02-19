@@ -1,0 +1,122 @@
+# Standard Log Levels (Python logging)
+#
+# 1. DEBUG (10)
+#   > Detailed diagnostic information.
+#   > Used when developing or troubleshooting.
+#   > Example: variable values, internal state updates.
+#
+# 2. INFO (20)
+#   > General runtime events to confirm things are working as expected.
+#   > Example: “Component X started successfully.”
+#
+# 3. WARNING (30)
+#   > Indicates something unexpected happened, but the program can still continue.
+#   > Example: “Heartbeat delayed — possible performance issue.”
+#
+# 4. ERROR (40)
+#   > A serious problem occurred; a specific operation failed.
+#   > Example: “Failed to connect to turbine controller.”
+#
+# 5. CRITICAL (50)
+#   > The program itself may not be able to continue.
+#   > Example: “Control system unresponsive — shutting down."
+
+# Main Runner ...
+path: "runner.py"
+args: []
+role: "The main Bootstrap of this system."
+autorestart: true
+critical: true
+log_level: "INFO"
+connections:
+  ctrl:
+    endpoint: "ipc:///tmp/main.ctrl"
+    type: "DEALER"
+  tick: 
+    endpoint: "ipc:///tmp/clock.tick"
+    type: "SUB"
+  heartbeat:
+    endpoint: "ipc:///tmp/main.heartbeat"
+    type: "PUB"
+  telemetry:
+    endpoint: "ipc:///tmp/main.telemetry"
+    type: "PUB"
+  in: 
+  out:
+    - name: "runner"
+      endpoint: "ipc:///tmp/runner.connection"
+      type: "PUSH"
+  other:
+spawn_list:
+  foreground:
+    - name:  "control_safety"
+      path: "components/control_safety/control_system.py"
+      args: ["-u"]
+      role: "cli & user interaction (this helps in the organiging of the Entire system and lets the user control using cli like interface)."
+      autorestart: true
+      critical: true
+
+  background:
+    - name: "master_clock"
+      path: "components/master_clock/master_clock.py"
+      args: ["-u"]
+      role: "Orchestra for Sim/Main clock (this manages the time of the SIM and the Real world)."
+      autorestart: true
+      critical: true
+
+    - name: "reactor_core"
+      path: "components/reactor_core/reactor.py"
+      args: ["-u"]
+      role: "The main reactor core (the main source of heat Generation in the system)."
+      autorestart: true
+      critical: true
+
+    - name: "primary_coolant_loop"
+      path: "components/primary_coolant_loop/coolant.py"
+      args: ["-u"]
+      role: "The main primary coolant loop system (PWR main coolant loop)."
+      autorestart: true
+      critical: true
+
+    - name: "steam_generator"
+      path: "components/steam_generator/steam_generator.py"
+      args: ["-u"]
+      role: "The main steam generator which (unpressurised water heater)."
+      autorestart: true
+      critical: true
+
+    - name: "turbine_generator"
+      path: "components/turbine_generator/turbine.py"
+      args: ["-u"]
+      role: "The main steam turbine generator (which uses the steam form the steam_generator)."
+      autorestart: true
+      critical: true
+
+    - name: "condenser_cooling"
+      path: "components/condenser_cooling/condenser.py"
+      args: ["-u"]
+      role: "The main condenser cooling system (used for cooling the steam from the turbine and convert it back to water in lower temp)."
+      autorestart: true
+      critical: true
+
+    - name: "condenser_cooling_water_source"
+      path: "components/condenser_cooling_water_source/condenser_cooling_water_source.py"
+      args: ["-u"]
+      role: "The main river like water(coolent) source, from which condenser takes the water."
+      autorestart: true
+      critical: true
+
+    - name: "grid_interface"
+      path: "components/grid_interface/grid.py"
+      args: ["-u"]
+      role: "The main Electrical Grid interface which is connected to the outside for Electrical conversion."
+      autorestart: true
+      critical: true
+
+    - name: "telemetry_logging"
+      path: "components/telemetry_logging/telemetry.py"
+      args: ["-u"]
+      role: "The main telemetry loogging system which logs all the data."
+      autorestart: true
+      critical: true
+
